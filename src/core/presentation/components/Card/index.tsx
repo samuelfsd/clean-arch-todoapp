@@ -15,10 +15,10 @@ export function CardWrapper({ title }: CardProps) {
 
 
           <Flex justify="center" gap="3">
-            <Button>
+            <Button color="green">
               <CheckIcon /> Completar
             </Button>
-            <Button>
+            <Button color="red">
               <TrashIcon/> Deletar
             </Button>
           </Flex>
