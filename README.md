@@ -12,3 +12,4 @@ pending...
 - Clean Arch
 - Vite
 - Radix Themes and Radix Icons
+- Biome

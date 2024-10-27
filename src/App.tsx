@@ -1,9 +1,9 @@
-import { TodoPage } from "./todo/presentation/components/TodoPage";
+import { TodoPage } from './todo/presentation/components/TodoPage';
 
 export function App() {
-	return (
-		<>
-			<TodoPage />
-		</>
-	);
+  return (
+    <>
+      <TodoPage />
+    </>
+  );
 }
