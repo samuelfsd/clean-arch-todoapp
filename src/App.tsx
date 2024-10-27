@@ -1,11 +1,9 @@
-import { CardWrapper } from "./core/presentation/components/Card";
-import { Search } from "./core/presentation/components/Search";
+import { TodoPage } from "./todo/presentation/components/TodoPage";
 
 export function App() {
-  return (
-    <>
-      <Search />
-      <CardWrapper title="Ler livro" />
-    </>
-  )
+	return (
+		<>
+			<TodoPage />
+		</>
+	);
 }
