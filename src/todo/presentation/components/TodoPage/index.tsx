@@ -1,10 +1,22 @@
-import { todos } from '../../../data/base';
+import { type MakeTodoProvider, makeTodo } from '../../../main/makeTodo';
+import { useTodos } from '../../hooks/useTodos';
 import { TodoCard } from '../TodoCard';
 import { TodoSearch } from '../TodoSearch';
 
 import styles from './styles.module.css';
 
-export function TodoPage() {
+interface TodoPageProps {
+  makeTodo: MakeTodoProvider;
+}
+
+export function TodoPage({ makeTodo }: TodoPageProps) {
+  const { getTodos } = makeTodo;
+  const { todos, isLoading, removeTodo } = useTodos({ getTodos });
+
+  if (isLoading) {
+    return <p>carregando...</p>;
+  }
+
   return (
     <>
       <TodoSearch />
@@ -12,10 +24,14 @@ export function TodoPage() {
       {todos.map((todo) => {
         return (
           <section className={styles.section} key={todo.id}>
-            <TodoCard title={todo.title} />
+            <TodoCard removeItem={removeTodo} todo={todo} />
           </section>
         );
       })}
     </>
   );
+}
+
+export function TodoPageFactory() {
+  return <TodoPage makeTodo={makeTodo()} />;
 }
