@@ -1,9 +1,9 @@
 import type { IGetTodosContract } from '../data/contracts/getTodosContract';
 import { GetTodosService } from '../data/services/getTodosService';
 
-export type MakeTodoType = IGetTodosContract;
+export type MakeTodoProvider = IGetTodosContract;
 
-export function MakeTodo(): MakeTodoType {
+export function makeTodo(): MakeTodoProvider {
   const getTodos = new GetTodosService();
 
   return {
