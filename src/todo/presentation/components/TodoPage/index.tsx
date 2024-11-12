@@ -10,8 +10,7 @@ interface TodoPageProps {
 }
 
 export function TodoPage({ makeTodo }: TodoPageProps) {
-  const { getTodos } = makeTodo;
-  const { todos, isLoading, removeTodo } = useTodos({ getTodos });
+  const { todos, isLoading, removeTodo } = useTodos({ makeTodo });
 
   if (isLoading) {
     return <p>carregando...</p>;

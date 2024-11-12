@@ -11,8 +11,8 @@ export interface IUseTodoProps {
   makeTodo: MakeTodoProvider;
 }
 
-export function useTodos(params: MakeTodoProvider) {
-  const { getTodos } = params;
+export function useTodos({ makeTodo }: IUseTodoProps) {
+  const { getTodos, deleteTodoById } = makeTodo;
 
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
@@ -28,12 +28,18 @@ export function useTodos(params: MakeTodoProvider) {
     });
   }, [getTodos]);
 
-  const removeTodo = useCallback((id: string) => {
-    setState((prevState) => ({
-      ...prevState,
-      todos: prevState.todos.filter((todo) => todo.id !== id),
-    }));
-  }, []);
+  const removeTodo = useCallback(
+    (id: string) => {
+      setState((prev) => ({ ...prev, isLoading: true }));
+      const todos = deleteTodoById(id);
+      setState((prevState) => ({
+        ...prevState,
+        todos,
+        isLoading: false,
+      }));
+    },
+    [deleteTodoById],
+  );
 
   useEffect(() => {
     fetchTodos();
