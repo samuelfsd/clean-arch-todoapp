@@ -10,7 +10,7 @@ export class DeleteTodoByIdService implements IDeleteTodoById {
       todos.splice(findTodoToDelete, 1);
       return todos;
     }
-
-    throw new Error('Não existe uma tarefa com este id.');
+    //@TODO: adicionar uma tratativa de erro melhor
+    throw new Error('Erro ao procurar tarefa.');
   }
 }
