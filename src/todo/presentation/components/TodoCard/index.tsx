@@ -22,7 +22,7 @@ export function TodoCard({ todo, removeItem }: CardProps) {
     >
       <Container size="3">
         <Box p="4">
-          <Grid columns={{ initial: '1', md: '2' }} gap="3" width="auto">
+          <Grid columns={{ initial: '2' }} gap="3" width="auto">
             <Strong>{todo.title}</Strong>
 
             <Flex justify="center" gap="3">
