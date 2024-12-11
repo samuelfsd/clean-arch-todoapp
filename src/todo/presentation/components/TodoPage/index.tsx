@@ -10,7 +10,7 @@ interface TodoPageProps {
 }
 
 export function TodoPage({ makeTodo }: TodoPageProps) {
-  const { todos, isLoading, removeTodo } = useTodos({ makeTodo });
+  const { todos, isLoading, removeTodo, addTodo } = useTodos({ makeTodo });
 
   if (isLoading) {
     return <p>carregando...</p>;
@@ -18,7 +18,7 @@ export function TodoPage({ makeTodo }: TodoPageProps) {
 
   return (
     <>
-      <TodoSearch />
+      <TodoSearch addTodo={addTodo} />
 
       {todos.map((todo) => {
         return (
