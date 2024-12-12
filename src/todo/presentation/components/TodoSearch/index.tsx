@@ -10,6 +10,8 @@ import { Progress } from '../../../domain/enums/progressEnum';
 import styles from './styles.module.css';
 
 import { AddTodo } from '../../../data/contracts/addTodoContract';
+import { useTodos } from '../../hooks/useTodos';
+
 interface TodoSearchState {
   name: string;
   search: string;
@@ -17,11 +19,13 @@ interface TodoSearchState {
   data: AddTodo;
 }
 
-interface TodoSearchParams {
-  addTodo: (todo: AddTodo) => void;
+interface TodoSearchProps {
+  onChangeCallback: (search: string) => void;
 }
 
-export function TodoSearch({ addTodo }: TodoSearchParams) {
+export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
+  const { addTodo } = useTodos();
+
   const [state, setState] = useState<TodoSearchState>({
     name: '',
     search: '',
@@ -35,6 +39,7 @@ export function TodoSearch({ addTodo }: TodoSearchParams) {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState((prevState) => ({ ...prevState, search: e.target.value }));
+    onChangeCallback && onChangeCallback(state.search);
   };
 
   const handleAddTodo = () => {

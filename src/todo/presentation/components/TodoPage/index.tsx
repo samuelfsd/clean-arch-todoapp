@@ -1,26 +1,34 @@
-import { type MakeTodoProvider, makeTodo } from '../../../main/makeTodo';
+import { useEffect, useState } from 'react';
 import { useTodos } from '../../hooks/useTodos';
 import { TodoCard } from '../TodoCard';
 import { TodoSearch } from '../TodoSearch';
 
 import styles from './styles.module.css';
+import { Todo } from '../../../domain/entities/todo';
 
-interface TodoPageProps {
-  makeTodo: MakeTodoProvider;
-}
+export function TodoPage() {
+  const { todos, isLoading, removeTodo } = useTodos();
 
-export function TodoPage({ makeTodo }: TodoPageProps) {
-  const { todos, isLoading, removeTodo, addTodo } = useTodos({ makeTodo });
+  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
 
   if (isLoading) {
     return <p>carregando...</p>;
   }
 
+  const filterItems = (searchTerm: string) => {
+    const filtered = todos.filter((todo) => todo.title.toLowerCase().includes(searchTerm.toLowerCase()));
+    setFilteredTodos(filtered);
+  };
+
+  useEffect(() => {
+    setFilteredTodos(todos);
+  }, [todos]);
+
   return (
     <>
-      <TodoSearch addTodo={addTodo} />
+      <TodoSearch onChangeCallback={filterItems} />
 
-      {todos.map((todo) => {
+      {filteredTodos.map((todo) => {
         return (
           <section className={styles.section} key={todo.id}>
             <TodoCard removeItem={removeTodo} todo={todo} />
@@ -32,5 +40,5 @@ export function TodoPage({ makeTodo }: TodoPageProps) {
 }
 
 export function TodoPageFactory() {
-  return <TodoPage makeTodo={makeTodo()} />;
+  return <TodoPage />;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Todo } from '../../domain/entities/todo';
-import type { MakeTodoProvider } from '../../main/makeTodo';
+import { makeTodo } from '../../main/makeTodo';
 import { AddTodo } from '../../data/contracts/addTodoContract';
 
 export interface IUseTodosState {
@@ -8,12 +8,8 @@ export interface IUseTodosState {
   isLoading: boolean;
 }
 
-export interface IUseTodoProps {
-  makeTodo: MakeTodoProvider;
-}
-
-export function useTodos({ makeTodo }: IUseTodoProps) {
-  const { getTodos, deleteTodoById, addTodo: addTodos } = makeTodo;
+export function useTodos() {
+  const { getTodos, deleteTodoById, addTodo: addTodos } = makeTodo();
 
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
@@ -56,7 +52,9 @@ export function useTodos({ makeTodo }: IUseTodoProps) {
   );
 
   useEffect(() => {
-    fetchTodos();
+    if (!state.todos.length) {
+      fetchTodos();
+    }
   }, [fetchTodos]);
 
   return {
