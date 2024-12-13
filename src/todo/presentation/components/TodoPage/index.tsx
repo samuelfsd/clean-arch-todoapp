@@ -3,8 +3,8 @@ import { useTodos } from '../../hooks/useTodos';
 import { TodoCard } from '../TodoCard';
 import { TodoSearch } from '../TodoSearch';
 
-import styles from './styles.module.css';
 import { Todo } from '../../../domain/entities/todo';
+import styles from './styles.module.css';
 
 export function TodoPage() {
   const { todos, isLoading, removeTodo } = useTodos();
