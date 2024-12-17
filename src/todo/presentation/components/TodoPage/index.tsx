@@ -4,7 +4,6 @@ import { TodoCard } from '../TodoCard';
 import { TodoSearch } from '../TodoSearch';
 
 import { Todo } from '../../../domain/entities/todo';
-import styles from './styles.module.css';
 
 export function TodoPage() {
   const { todos, isLoading, removeTodo } = useTodos();
@@ -28,13 +27,15 @@ export function TodoPage() {
     <>
       <TodoSearch onChangeCallback={filterItems} />
 
-      {filteredTodos.map((todo) => {
-        return (
-          <section className={styles.section} key={todo.id}>
-            <TodoCard removeItem={removeTodo} todo={todo} />
-          </section>
-        );
-      })}
+      <div className="flex flex-col gap-8">
+        {filteredTodos.map((todo) => {
+          return (
+            <section className="flex items-center justify-center " key={todo.id}>
+              <TodoCard removeItem={removeTodo} todo={todo} />
+            </section>
+          );
+        })}
+      </div>
     </>
   );
 }
