@@ -11,7 +11,8 @@ export interface IUseTodosState {
 
 export function useTodos() {
   const { getTodos, deleteTodoById, addTodo: addTodos } = makeTodo();
-
+  
+  // agora é preciso exportar o estado de busca 
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
     search: '', 
