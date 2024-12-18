@@ -58,7 +58,7 @@ export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
           </div>
 
           <input
-            className="w-full pl-8 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+            className="w-full pl-8 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-400 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-600 hover:border-slate-300 shadow-sm focus:shadow"
             placeholder="Pesquise aqui…"
             value={state.search}
             onChange={handleSearchChange}
