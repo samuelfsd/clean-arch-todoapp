@@ -5,6 +5,7 @@ import { AddTodo } from '../../data/contracts/addTodoContract';
 
 export interface IUseTodosState {
   todos: Todo[];
+  search: string;
   isLoading: boolean;
 }
 
@@ -13,6 +14,7 @@ export function useTodos() {
 
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
+    search: '', 
     isLoading: false,
   });
 
@@ -21,6 +23,7 @@ export function useTodos() {
     const todos = getTodos();
     setState({
       todos,
+      search: '', 
       isLoading: false,
     });
   }, [getTodos]);
