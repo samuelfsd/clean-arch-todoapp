@@ -1,39 +1,25 @@
-import { useEffect, useState } from 'react';
 import { useTodos } from '../../hooks/useTodos';
 import { TodoCard } from '../TodoCard';
 import { TodoSearch } from '../TodoSearch';
 
-import { Todo } from '../../../domain/entities/todo';
+interface TodoPageProps {
+  todoHook: ReturnType<typeof useTodos>;
+}
 
-export function TodoPage() {
-  const { todos, isLoading, removeTodo } = useTodos();
-
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
+export function TodoPage({ todoHook }: TodoPageProps) {
+  const { search, setSearch, addTodo, isLoading, todos, removeTodo } = todoHook;
 
   if (isLoading) {
     return <p>carregando...</p>;
   }
 
-  const filterItems = (searchTerm: string) => {
-    const filtered = todos.filter((todo) => todo.title.toLowerCase().includes(searchTerm.toLowerCase()));
-    setFilteredTodos(filtered);
-  };
-
-  useEffect(() => {
-    setFilteredTodos(todos);
-  }, [todos]);
-
   return (
     <>
-      <TodoSearch onChangeCallback={filterItems} />
+      <TodoSearch addTodo={addTodo} search={search} setSearch={setSearch} />
 
       <div className="flex flex-col gap-8">
-        {filteredTodos.map((todo) => {
-          return (
-            <section className="flex items-center justify-center " key={todo.id}>
-              <TodoCard removeItem={removeTodo} todo={todo} />
-            </section>
-          );
+        {todos.map((todo) => {
+          return <TodoCard todo={todo} removeItem={removeTodo} key={`${todo.id}-${todo.title}`} />;
         })}
       </div>
     </>
@@ -41,5 +27,7 @@ export function TodoPage() {
 }
 
 export function TodoPageFactory() {
-  return <TodoPage />;
+  const todoHook = useTodos();
+
+  return <TodoPage todoHook={todoHook} />;
 }

@@ -9,25 +9,21 @@ import { Progress } from '../../../domain/enums/progressEnum';
 import styles from './styles.module.css';
 
 import { AddTodo } from '../../../data/contracts/addTodoContract';
-import { useTodos } from '../../hooks/useTodos';
 
+interface TodoSearchProps {
+  search: string;
+  setSearch: (search: string) => void;
+  addTodo: (todo: AddTodo) => void;
+}
 interface TodoSearchState {
   name: string;
-  search: string;
   checked: boolean;
   data: AddTodo;
 }
 
-interface TodoSearchProps {
-  onChangeCallback: (search: string) => void;
-}
-
-export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
-  const { addTodo } = useTodos();
-
+export function TodoSearch({ addTodo, search, setSearch }: TodoSearchProps) {
   const [state, setState] = useState<TodoSearchState>({
     name: '',
-    search: '',
     checked: false,
     data: { title: '', progress: Progress.IN_PROGRESS },
   });
@@ -37,8 +33,8 @@ export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setState((prevState) => ({ ...prevState, search: e.target.value }));
-    onChangeCallback && onChangeCallback(state.search);
+    console.log(e.target.value);
+    setSearch(e.target.value);
   };
 
   const handleAddTodo = () => {
@@ -50,7 +46,7 @@ export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
   };
 
   return (
-    <div className="flex items-center justify-center my-4 gap-6">
+    <div className="flex items-center justify-center my-16 gap-6">
       <div className="w-full max-w-sm min-w-[130px]">
         <div className="relative">
           <div className="absolute left-1 top-1 rounded p-1.5 border border-transparent text-center ">
@@ -60,7 +56,7 @@ export function TodoSearch({ onChangeCallback }: TodoSearchProps) {
           <input
             className="w-full pl-8 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-400 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-600 hover:border-slate-300 shadow-sm focus:shadow"
             placeholder="Pesquise aqui…"
-            value={state.search}
+            value={search}
             onChange={handleSearchChange}
           />
         </div>
