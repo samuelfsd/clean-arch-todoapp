@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Todo } from '../../domain/entities/todo';
 import { makeTodo } from '../../main/makeTodo';
 import { AddTodo } from '../../data/contracts/addTodoContract';
@@ -11,22 +11,21 @@ export interface IUseTodosState {
 
 export function useTodos() {
   const { getTodos, deleteTodoById, addTodo: addTodos } = makeTodo();
-  
-  // agora é preciso exportar o estado de busca 
+
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
-    search: '', 
+    search: '',
     isLoading: false,
   });
 
   const fetchTodos = useCallback(() => {
     setState((prev) => ({ ...prev, isLoading: true }));
     const todos = getTodos();
-    setState({
+    setState((prev) => ({
+      ...prev,
       todos,
-      search: '', 
       isLoading: false,
-    });
+    }));
   }, [getTodos]);
 
   const removeTodo = useCallback(
@@ -55,16 +54,26 @@ export function useTodos() {
     [addTodos],
   );
 
+  const setSearch = useCallback((search: string) => {
+    setState((prevState) => ({ ...prevState, search: search }));
+  }, []);
+
+  const filteredTodos = state.todos.filter((todo) => todo.title.toLowerCase().includes(state.search.toLowerCase()));
+
   useEffect(() => {
-    if (!state.todos.length) {
+    if (state.todos.length === 0) {
       fetchTodos();
     }
   }, [fetchTodos]);
 
   return {
-    todos: state.todos,
+    todos: filteredTodos,
     isLoading: state.isLoading,
+    search: state.search,
+
+    // functions
     removeTodo,
     addTodo,
+    setSearch,
   };
 }
