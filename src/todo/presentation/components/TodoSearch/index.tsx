@@ -1,31 +1,30 @@
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { ChangeEvent, useState } from 'react';
-
-import * as Dialog from '@radix-ui/react-dialog';
-import { Cross2Icon } from '@radix-ui/react-icons';
 
 import { Progress } from '../../../domain/enums/progressEnum';
 
-import styles from './styles.module.css';
-
 import { AddTodo } from '../../../data/contracts/addTodoContract';
+import { useTodos } from '../../hooks/useTodos';
+import { Search } from 'lucide-react';
+import { Modal } from '../../../../core/presentation/components/modal';
 
 interface TodoSearchProps {
-  search: string;
-  setSearch: (search: string) => void;
-  addTodo: (todo: AddTodo) => void;
+  useTodos: ReturnType<typeof useTodos>;
 }
 interface TodoSearchState {
   name: string;
   checked: boolean;
   data: AddTodo;
+  open: boolean;
 }
 
-export function TodoSearch({ addTodo, search, setSearch }: TodoSearchProps) {
+export function TodoSearch({ useTodos }: TodoSearchProps) {
+  const { search, setSearch, addTodo } = useTodos;
+
   const [state, setState] = useState<TodoSearchState>({
     name: '',
     checked: false,
     data: { title: '', progress: Progress.IN_PROGRESS },
+    open: false,
   });
 
   const handleChangeCheckedValue = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +32,6 @@ export function TodoSearch({ addTodo, search, setSearch }: TodoSearchProps) {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     setSearch(e.target.value);
   };
 
@@ -42,19 +40,35 @@ export function TodoSearch({ addTodo, search, setSearch }: TodoSearchProps) {
       title: state.name,
       progress: state.checked ? Progress.COMPLETED : Progress.IN_PROGRESS,
     };
+
     addTodo(todo);
+    setState({
+      open: false,
+      name: '',
+      checked: false,
+      data: { title: '', progress: Progress.IN_PROGRESS },
+    });
+  };
+
+  const handleCloseModal = () => {
+    setState({
+      open: false,
+      name: '',
+      checked: false,
+      data: { title: '', progress: Progress.IN_PROGRESS },
+    });
   };
 
   return (
-    <div className="flex items-center justify-center my-16 gap-6">
-      <div className="w-full max-w-sm min-w-[130px]">
+    <div className="flex flex-col items-center md:justify-center md:flex-row my-16 gap-6">
+      <div className="px-4 w-full md:w-[700px]">
         <div className="relative">
-          <div className="absolute left-1 top-1 rounded p-1.5 border border-transparent text-center ">
-            <MagnifyingGlassIcon height="16" width="16" />
+          <div className="absolute left-1 top-2.5 rounded p-1.5 border border-transparent text-center ">
+            <Search className="w-4 h-4 text-black" />
           </div>
 
           <input
-            className="w-full pl-8 pr-10 py-2 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-400 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-600 hover:border-slate-300 shadow-sm focus:shadow"
+            className="w-full pl-8 pr-10 py-2 rounded-none bg-transparent bg-white h-12 border-2 ring-offset-background placeholder:text-black text-black text-md border-black transition duration-300 ease focus:outline-none focus:border-amber-400 hover:border-amber-300 shadow-sm "
             placeholder="Pesquise aqui…"
             value={search}
             onChange={handleSearchChange}
@@ -62,51 +76,54 @@ export function TodoSearch({ addTodo, search, setSearch }: TodoSearchProps) {
         </div>
       </div>
 
-      <Dialog.Root>
-        <Dialog.Trigger asChild>
-          <button type="button" className={`${styles.Button} violet`}>
-            Adicionar
-          </button>
-        </Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className={styles.Overlay} />
-          <Dialog.Content className={styles.Content}>
-            <Dialog.Title className={styles.Title}>Adicionar tarefa!</Dialog.Title>
-            <Dialog.Description className={styles.Description}>
-              Crie aqui uma nova tarefa para suas atividades!
-            </Dialog.Description>
-            <fieldset className={styles.Fieldset}>
-              <label className={styles.Label} htmlFor="title">
+      <div className="mr-4 ml-auto md:ml-0 md:mr-0">
+        <button
+          type="button"
+          className="btn md:w-[130px] rounded-none border-2 border-black bg-white hover:bg-zinc-100 text-black font-extrabold"
+          onClick={() => setState((prevState) => ({ ...prevState, open: true }))}
+        >
+          Criar atividade!
+        </button>
+
+        <Modal open={state.open} onClose={handleCloseModal}>
+          <form className="flex flex-col gap-4 pt-8">
+            <div className="flex items-center gap-4">
+              <label className="font-extrabold text-black" htmlFor="title">
                 Nome
               </label>
+
               <input
-                className={styles.Input}
                 id="name"
                 value={state.name}
+                className="w-64 pl-4 rounded-none bg-transparent bg-white h-10 border-2 ring-offset-background placeholder:text-black text-black text-md border-black transition duration-300 ease focus:outline-none focus:border-amber-400 hover:border-amber-300 shadow-sm "
+                placeholder="Informe o nome da tarefa."
                 onChange={(e) => setState((prevState) => ({ ...prevState, name: e.target.value }))}
               />
-            </fieldset>
-            <fieldset className={styles.Fieldset}>
-              <label className={styles.Label} htmlFor="title">
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="font-extrabold text-black" htmlFor="title">
                 Marcar como feito
               </label>
-              <input type="checkbox" checked={state.checked} onChange={handleChangeCheckedValue} />
-            </fieldset>
-            <div style={{ display: 'flex', marginTop: 25, justifyContent: 'flex-end' }}>
-              <Dialog.Close asChild>
-                <button type="button" className={`${styles.Button} green`} onClick={handleAddTodo}>
-                  Adicionar tarefa
-                </button>
-              </Dialog.Close>
+              <input
+                type="checkbox"
+                className="checkbox border-2 border-black rounded-none"
+                checked={state.checked}
+                onChange={handleChangeCheckedValue}
+              />
             </div>
-            <Dialog.Close asChild>
-              <button type="button" className={styles.IconButton} aria-label="Close">
-                <Cross2Icon />
-              </button>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+
+            <button
+              type="button"
+              disabled={state.name === ''}
+              className="btn rounded-none border-2 font-extrabold border-black bg-white self-end hover:bg-zinc-50 text-black  disabled:bg-gray-300 disabled:text-zinc-400"
+              onClick={handleAddTodo}
+            >
+              Adicionar tarefa
+            </button>
+          </form>
+        </Modal>
+      </div>
     </div>
   );
 }
