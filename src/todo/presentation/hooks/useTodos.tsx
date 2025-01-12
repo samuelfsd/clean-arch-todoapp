@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
 import type { Todo } from '../../domain/entities/todo';
+
 import { makeTodo } from '../../main/makeTodo';
 import { AddTodo } from '../../data/contracts/addTodoContract';
 
@@ -7,6 +9,7 @@ export interface IUseTodosState {
   todos: Todo[];
   search: string;
   isLoading: boolean;
+  isInitialized: boolean;
 }
 
 export function useTodos() {
@@ -16,9 +19,10 @@ export function useTodos() {
     todos: [],
     search: '',
     isLoading: false,
+    isInitialized: false,
   });
 
-  const fetchTodos = useCallback(() => {
+  const listTodos = useCallback(() => {
     setState((prev) => ({ ...prev, isLoading: true }));
     const todos = getTodos();
     setState((prev) => ({
@@ -61,10 +65,11 @@ export function useTodos() {
   const filteredTodos = state.todos.filter((todo) => todo.title.toLowerCase().includes(state.search.toLowerCase()));
 
   useEffect(() => {
-    if (state.todos.length === 0) {
-      fetchTodos();
+    if (!state.isInitialized) {
+      listTodos();
+      setState((prevState) => ({ ...prevState, isInitialized: true }));
     }
-  }, [fetchTodos]);
+  }, [state.isInitialized, listTodos]);
 
   return {
     todos: filteredTodos,
@@ -72,6 +77,7 @@ export function useTodos() {
     search: state.search,
 
     // functions
+    listTodos,
     removeTodo,
     addTodo,
     setSearch,
