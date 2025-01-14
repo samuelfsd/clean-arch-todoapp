@@ -17,7 +17,8 @@ Install the project with pnpm and run!
 ```
 ## lists of remaining activities 
 
-- [ ] it should be possible to complete a task
+- [x] it should be possible to complete a task
+- [ ] improve componentization (button, inputs...)
 - [ ] the application must contain automated tests 
 
 # Tech Stack
