@@ -13,7 +13,7 @@ export interface IUseTodosState {
 }
 
 export function useTodos() {
-  const { getTodos, deleteTodoById, addTodo: addTodos } = makeTodo();
+  const { getTodos, deleteTodoById, addTodo: addTodos, completeTodo: complete } = makeTodo();
 
   const [state, setState] = useState<IUseTodosState>({
     todos: [],
@@ -58,6 +58,19 @@ export function useTodos() {
     [addTodos],
   );
 
+  const completeTodo = useCallback(
+    (id: string) => {
+      setState((prevState) => ({ ...prevState, isLoading: true }));
+      const todos = complete(id);
+      setState((prevState) => ({
+        ...prevState,
+        todos,
+        isLoading: false,
+      }));
+    },
+    [complete],
+  );
+
   const setSearch = useCallback((search: string) => {
     setState((prevState) => ({ ...prevState, search: search }));
   }, []);
@@ -81,5 +94,6 @@ export function useTodos() {
     removeTodo,
     addTodo,
     setSearch,
+    completeTodo,
   };
 }

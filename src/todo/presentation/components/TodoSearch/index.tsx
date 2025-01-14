@@ -6,6 +6,7 @@ import { AddTodo } from '../../../data/contracts/addTodoContract';
 import { useTodos } from '../../hooks/useTodos';
 import { Search } from 'lucide-react';
 import { Modal } from '../../../../core/presentation/components/modal';
+import { toast } from 'sonner';
 
 interface TodoSearchProps {
   useTodos: ReturnType<typeof useTodos>;
@@ -48,6 +49,7 @@ export function TodoSearch({ useTodos }: TodoSearchProps) {
       checked: false,
       data: { title: '', progress: Progress.IN_PROGRESS },
     });
+    toast.success('Tarefa adicionada com sucesso!');
   };
 
   const handleCloseModal = () => {
@@ -95,7 +97,7 @@ export function TodoSearch({ useTodos }: TodoSearchProps) {
               <input
                 id="name"
                 value={state.name}
-                className="w-64 pl-4 rounded-none bg-transparent bg-white h-10 border-2 ring-offset-background placeholder:text-black text-black text-md border-black transition duration-300 ease focus:outline-none focus:border-amber-400 hover:border-amber-300 shadow-sm "
+                className="w-64 pl-2 rounded-none bg-transparent bg-white h-10 border-2 ring-offset-background placeholder:text-black text-black text-md border-black transition duration-300 ease focus:outline-none focus:border-amber-400 hover:border-amber-300 shadow-sm "
                 placeholder="Informe o nome da tarefa."
                 onChange={(e) => setState((prevState) => ({ ...prevState, name: e.target.value }))}
               />
@@ -107,7 +109,7 @@ export function TodoSearch({ useTodos }: TodoSearchProps) {
               </label>
               <input
                 type="checkbox"
-                className="checkbox border-2 border-black rounded-none"
+                className="checkbox border-2 border-black rounded-none bg-white"
                 checked={state.checked}
                 onChange={handleChangeCheckedValue}
               />

@@ -1,3 +1,4 @@
+import { Copy } from 'lucide-react';
 import { Footer } from '../../../../core/presentation/components/footer';
 import { useTodos } from '../../hooks/useTodos';
 import { TodoCard } from '../TodoCard';
@@ -8,7 +9,7 @@ interface TodoPageProps {
 }
 
 export function TodoPage({ useTodos }: TodoPageProps) {
-  const { isLoading, todos, removeTodo } = useTodos;
+  const { isLoading, todos, removeTodo, completeTodo } = useTodos;
 
   if (isLoading) {
     return <p>carregando...</p>;
@@ -21,7 +22,14 @@ export function TodoPage({ useTodos }: TodoPageProps) {
       {todos.length ? (
         <div className="flex flex-col w-full gap-8">
           {todos.map((todo) => {
-            return <TodoCard todo={todo} removeItem={removeTodo} key={`${todo.id}-${todo.title}`} />;
+            return (
+              <TodoCard
+                key={`${todo.id}-${todo.title}`}
+                todo={todo}
+                removeItem={removeTodo}
+                completeTodo={completeTodo}
+              />
+            );
           })}
         </div>
       ) : (
