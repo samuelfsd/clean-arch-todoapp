@@ -109,7 +109,7 @@ export function TodoSearch({ useTodos }: TodoSearchProps) {
               </label>
               <input
                 type="checkbox"
-                className="checkbox border-2 border-black rounded-none bg-white"
+                className="checkbox checkbox-secondary border-2 border-black rounded-none bg-white [--chkbg:theme(colors.zinc.600)] [--chkfg:black] checked:border-zinc-800"
                 checked={state.checked}
                 onChange={handleChangeCheckedValue}
               />
