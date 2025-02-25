@@ -9,17 +9,17 @@ Install the project with pnpm and run!
 ```
   // create project in your machine
   git clone
-  cd my-project 
+  cd my-project
 
   // install deps and run locally
-  pnpm i my-project 
-  pnpm run dev 
+  pnpm i my-project
+  pnpm run dev
 ```
-## lists of remaining activities 
+## lists of remaining activities
 
 - [x] it should be possible to complete a task
+- [x] the application must contain automated tests
 - [ ] improve componentization (button, inputs...)
-- [ ] the application must contain automated tests 
 
 # Tech Stack
 
